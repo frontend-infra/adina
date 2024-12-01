@@ -1,3 +1,24 @@
+const preloadResponses = {}
+
+const originalFetch = window.fetch
+
+window.fetch = async (input, options) => {
+  const requestID = `${input.toString()}${options?.body?.toString() || ''}`
+  const preloadResponse = preloadResponses[requestID]
+
+  if (preloadResponse) {
+    if (!options?.preload) delete preloadResponses[requestID]
+
+    return preloadResponse
+  }
+
+  const response = originalFetch(input, options)
+
+  if (options?.preload) preloadResponses[requestID] = response
+
+  return response
+}
+
 const isMatch = (pathname, path) => {
   if (pathname === path) return { exact: true, match: true }
   if (!path.includes(':')) return { match: false }
@@ -33,7 +54,7 @@ const preloadAssets = () => {
 
   if (!matchingPages.length) return
 
-  const { path, title, scripts, data } = matchingPages.find(({ exact }) => exact) || matchingPages[0]
+  const { path, title, scripts, data, preconnect } = matchingPages.find(({ exact }) => exact) || matchingPages[0]
 
   scripts.forEach(script => {
     document.head.appendChild(
@@ -41,25 +62,17 @@ const preloadAssets = () => {
     )
   })
 
-  data?.forEach(({ url, crossorigin, preconnectURL }) => {
+  data?.forEach(({ url, ...request }) => {
     if (url.startsWith('func:')) url = eval(url.replace('func:', ''))
 
-    const fullURL = typeof url === 'string' ? url : url(getDynamicProperties(pathname, path))
+    const constructedURL = typeof url === 'string' ? url : url(getDynamicProperties(pathname, path))
 
-    document.head.appendChild(
-      Object.assign(document.createElement('link'), {
-        rel: 'preload',
-        href: fullURL,
-        as: 'fetch',
-        crossOrigin: crossorigin
-      })
-    )
+    fetch(constructedURL, { ...request, preload: true })
+  })
 
-    if (preconnectURL) {
-      document.head.appendChild(
-        Object.assign(document.createElement('link'), { rel: 'preconnect', href: preconnectURL })
-      )
-    }
+  // https://issues.chromium.org/issues/380896837
+  preconnect?.forEach(url => {
+    document.head.appendChild(Object.assign(document.createElement('link'), { rel: 'preconnect', href: url }))
   })
 
   if (title) document.title = title
