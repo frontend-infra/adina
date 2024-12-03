@@ -44,3 +44,5 @@ _**Adina (Static):**_
 2. Carefully merge the contents of the `rspack.config.js` file with your own.
 3. Install any missing dependencies specified in `rspack.config.js`.
 4. Import `utils/service-worker-registration.ts` in your main index file.
+
+Ensure that `"type": "module"` is included in your `package.json`.

@@ -39,7 +39,7 @@ export default () => ({
       patterns: [
         {
           from: 'public',
-          globOptions: { ignore: ['**/index.js'] },
+          globOptions: { ignore: ['**/index.html'] },
           info: { minimized: true }
         }
       ]
