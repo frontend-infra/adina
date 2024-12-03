@@ -40,5 +40,6 @@ _**Adina (Static):**_
 
 ## Installation
 
-1. Merge `public`, `scripts` and `src` folders into your existing project.
-2. Deeply merge `rspack.config.js` file content into your own.
+1. Integrate the `public`, `scripts`, and `src` folders into your existing project.
+2. Carefully merge the contents of the `rspack.config.js` file with your own.
+3. Install any missing dependencies specified in `rspack.config.js`.
