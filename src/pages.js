@@ -7,7 +7,7 @@ export default {
     path: '/pokemon',
     title: 'Pokémon',
     data: [
-      { url: 'https://pokeapi.co/api/v2/pokemon?limit=10000' },
+      { url: 'https://pokeapi.co/api/v2/pokemon?limit=2000' },
       {
         url: 'https://graphql-pokeapi.graphcdn.app',
         method: 'post',
