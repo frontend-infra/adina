@@ -16,7 +16,10 @@ https://github.com/theninthsky/client-side-rendering
 4. On subsequent visits, the service worker requests the page and includes an `X-Cached` header with all cached assets.
 5. The serverless worker then responds with a `304 Not Modified` status if no changes are detected, or it adaptively inlines any new or missing assets into the HTML response.
 
-Additionally, all fetch requests are preloaded immediately.
+## Additional Features
+
+1. [Preloading of Data](https://github.com/theninthsky/client-side-rendering#preloading-data)
+2. [Instant Rendering](https://github.com/theninthsky/client-side-rendering#instant-rendering)
 
 The following network snapshots help illustrate the impact of Adina on the load waterfall:
 
@@ -32,7 +35,7 @@ _**Adina Repeated Load (full cache):**_
 
 ![Adina Repeated Load](images/adina-repeated-load.png)
 
-Adina can also be used in a static setup, without the need for a serverless worker:
+Adina can also be used in a static setup, without a serverless worker:
 
 _**Adina (Static):**_
 
@@ -44,5 +47,6 @@ _**Adina (Static):**_
 2. Carefully merge the contents of the `rspack.config.js` file with your own.
 3. Install any missing dependencies specified in `rspack.config.js`.
 4. Import `utils/service-worker-registration.ts` in your main index file.
+5. Specify all of your named async chunks in a `pages.js` file.
 
 Ensure that `"type": "module"` is included in your `package.json`.
