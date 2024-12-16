@@ -16,10 +16,7 @@ https://github.com/theninthsky/client-side-rendering
 4. On subsequent visits, the service worker requests the page and includes an `X-Cached` header with all cached assets.
 5. The serverless worker then responds with a `304 Not Modified` status if no changes are detected, or it adaptively inlines any new or missing assets into the HTML response.
 
-## Additional Features
-
-1. [Preloading of Data](https://github.com/theninthsky/client-side-rendering#preloading-data)
-2. [Instant Rendering](https://github.com/theninthsky/client-side-rendering#instant-rendering)
+[Data Preloading](https://github.com/theninthsky/client-side-rendering#preloading-data) is also supported.
 
 The following network snapshots help illustrate the impact of Adina on the load waterfall:
 

@@ -21,14 +21,13 @@ const register = () => {
     }
   })
 
-  navigator.serviceWorker?.addEventListener('message', event => {
-    const { action } = event.data
+  navigator.serviceWorker?.addEventListener('message', async event => {
+    const { navigationPreloadHeader } = event.data
 
-    if (action === 'reload') return window.location.reload()
-    if (action === 'make-visible') document.body.removeAttribute('style')
+    const registration = await navigator.serviceWorker.ready
+
+    registration.navigationPreload.setHeaderValue(navigationPreloadHeader)
   })
-
-  if (!navigator.onLine) document.body.removeAttribute('style')
 }
 
 const unregister = async () => {
