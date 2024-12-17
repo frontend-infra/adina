@@ -9,7 +9,6 @@ const __dirname = import.meta.dirname
 
 export default () => ({
   output: {
-    path: join(__dirname, 'build'),
     publicPath: '/',
     filename: 'scripts/[name].[contenthash:6].js'
   },
@@ -34,6 +33,16 @@ export default () => ({
     }
   },
   plugins: [
+    ...(production
+      ? [
+          new InjectManifest({
+            include: [/fonts\//, /scripts\/.+\.js$/],
+            swSrc: join(__dirname, 'public', 'service-worker.js'),
+            compileSrc: false,
+            maximumFileSizeToCacheInBytes: 10000000
+          })
+        ]
+      : []),
     new HtmlPlugin({ template: 'public/index.html', scriptLoading: 'module' }),
     new rspack.CopyRspackPlugin({
       patterns: [
@@ -43,12 +52,6 @@ export default () => ({
           info: { minimized: true }
         }
       ]
-    }),
-    new InjectManifest({
-      include: [/fonts\//, /scripts\/.+\.js$/],
-      swSrc: join(__dirname, 'public', 'service-worker.js'),
-      compileSrc: false,
-      maximumFileSizeToCacheInBytes: 10000000
     }),
     new InjectAssetsPlugin()
   ]
